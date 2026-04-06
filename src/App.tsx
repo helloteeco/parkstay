@@ -13,6 +13,8 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import DoNotSell from "./pages/DoNotSell";
 import CookieConsent from "@/components/CookieConsent";
+import LaunchModal from "@/components/LaunchModal";
+import FloatingWaitlistCTA from "@/components/FloatingWaitlistCTA";
 
 function Router() {
   return (
@@ -39,6 +41,8 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <LaunchModal />
+          <FloatingWaitlistCTA />
           <CookieConsent />
         </TooltipProvider>
       </ThemeProvider>

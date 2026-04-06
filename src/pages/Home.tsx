@@ -69,8 +69,8 @@ export default function Home() {
               <span className="text-[#e5e3da]">Great Outdoors</span>
             </h1>
             <p className="text-base md:text-lg text-white/85 font-light max-w-xl mx-auto leading-relaxed">
-              Discover stays near 474+ national parks, monuments, and forests. 
-              Pick the destination first — we'll find the perfect place to stay.
+              The first booking platform built around national parks, not addresses.
+              Launching soon — join the waitlist for early access.
             </p>
           </motion.div>
 
@@ -132,8 +132,8 @@ export default function Home() {
               },
               {
                 icon: <TreePine className="text-[#3d5a3e]" size={28} />,
-                title: 'Book Your Stay',
-                desc: 'Find curated vacation rentals within 30 miles of the park — cabins, lodges, and family homes.',
+                title: 'Get Notified',
+                desc: 'Join the waitlist and we\'ll notify you when curated stays near your favorite parks go live.',
               },
             ].map((step, i) => (
               <FadeIn key={step.title} delay={i * 0.15}>
@@ -206,7 +206,7 @@ export default function Home() {
               Click a State to Discover Parks
             </h2>
             <p className="text-[#787060] max-w-md mx-auto">
-              States highlighted in green have national park destinations with stays available.
+              States highlighted in green have national park destinations. Click to explore.
             </p>
           </FadeIn>
 
