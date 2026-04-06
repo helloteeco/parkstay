@@ -3,12 +3,14 @@
   Shows "ParkStay is launching soon" with two paths:
   - "I'm a Traveler" → opens WaitlistModal
   - "I'm a Host" → navigates to /list-your-property
+  - "Share with a Friend" → native share or copy link
   Uses localStorage to only show once per visitor.
 */
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mountain, Compass, Home, Sparkles } from 'lucide-react';
+import { X, Mountain, Compass, Home, Sparkles, Share2, Check, Copy } from 'lucide-react';
+import { toast } from 'sonner';
 import WaitlistModal from './WaitlistModal';
 
 const STORAGE_KEY = 'parkstay_launch_seen';
@@ -16,6 +18,7 @@ const STORAGE_KEY = 'parkstay_launch_seen';
 export default function LaunchModal() {
   const [showLaunch, setShowLaunch] = useState(false);
   const [showTravelerForm, setShowTravelerForm] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [, setLocation] = useLocation();
 
   useEffect(() => {
@@ -42,6 +45,38 @@ export default function LaunchModal() {
   const handleHost = () => {
     dismiss();
     setLocation('/list-your-property');
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'ParkStay — Book Stays Near National Parks',
+      text: 'Check out ParkStay — the first booking platform built around national parks. They\'re launching soon and you can join the waitlist for early access!',
+      url: window.location.origin,
+    };
+
+    // Try native share (works on mobile and some desktop browsers)
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast.success('Thanks for sharing!');
+        return;
+      } catch (err) {
+        // User cancelled or share failed — fall through to copy
+        if ((err as Error).name === 'AbortError') return;
+      }
+    }
+
+    // Fallback: copy link to clipboard
+    try {
+      await navigator.clipboard.writeText(
+        `${shareData.text}\n\n${shareData.url}`
+      );
+      setCopied(true);
+      toast.success('Link copied to clipboard!');
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error('Could not copy link');
+    }
   };
 
   return (
@@ -132,10 +167,28 @@ export default function LaunchModal() {
                   </button>
                 </div>
 
+                {/* Share with a friend */}
+                <button
+                  onClick={handleShare}
+                  className="w-full mt-4 flex items-center justify-center gap-2 bg-[#2b2823] hover:bg-[#1a1815] text-white rounded-xl px-4 py-3 text-sm font-medium transition-colors"
+                >
+                  {copied ? (
+                    <>
+                      <Check size={16} />
+                      Link Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Share2 size={16} />
+                      Share with a Friend
+                    </>
+                  )}
+                </button>
+
                 {/* Skip */}
                 <button
                   onClick={dismiss}
-                  className="w-full mt-4 text-xs text-[#a09a8e] hover:text-[#787060] transition-colors text-center py-2"
+                  className="w-full mt-3 text-xs text-[#a09a8e] hover:text-[#787060] transition-colors text-center py-2"
                 >
                   Just browsing — let me explore first
                 </button>
