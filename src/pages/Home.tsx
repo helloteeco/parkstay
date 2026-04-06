@@ -94,7 +94,7 @@ export default function Home() {
             {[
               { label: 'National Parks', value: '63' },
               { label: 'Destinations', value: '474+' },
-              { label: 'Stays Listed', value: '2,400+' },
+              { label: 'Stays', value: 'Coming Soon' },
             ].map(stat => (
               <div key={stat.label} className="text-center">
                 <p className="text-xl md:text-2xl font-serif font-bold text-white">{stat.value}</p>
@@ -309,53 +309,32 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== TESTIMONIALS ===== */}
+      {/* ===== EARLY ADOPTER CTA ===== */}
       <section className="py-16 md:py-20 bg-[#2b2823] text-[#e5e3da]">
         <div className="container">
-          <FadeIn className="text-center mb-12">
-            <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#7a8c6e] mb-3">What Families Say</p>
-            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-[#e5e3da]">
-              Stories from the Trail
+          <FadeIn className="text-center max-w-2xl mx-auto">
+            <p className="text-xs font-medium tracking-[0.15em] uppercase text-[#7a8c6e] mb-3">Be Among the First</p>
+            <h2 className="font-serif text-3xl md:text-4xl font-semibold text-[#e5e3da] mb-4">
+              We're Building Something New
             </h2>
-          </FadeIn>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {[
-              {
-                quote: "We used to spend hours on Airbnb trying to find a place near Yellowstone. ParkStay showed us the park first, then the perfect cabin was right there. Game changer for our family.",
-                name: 'Sarah M.',
-                trip: 'Yellowstone, WY',
-                stars: 5,
-              },
-              {
-                quote: "Planned our entire East Coast road trip — Shenandoah to Great Smokies to New River Gorge. The kids still talk about it. So much easier than piecing it together ourselves.",
-                name: 'David & Lisa K.',
-                trip: '3-park road trip',
-                stars: 5,
-              },
-              {
-                quote: "As a property owner near Mammoth Cave, listing on ParkStay has been incredible. Guests come specifically for the park experience, and they're the best guests we've ever had.",
-                name: 'Tom R.',
-                trip: 'Host, Mammoth Cave, KY',
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <FadeIn key={t.name} delay={i * 0.15}>
-                <div className="bg-[#353129] rounded-xl p-6 border border-[#4a463d]">
-                  <div className="flex gap-0.5 mb-4">
-                    {Array.from({ length: t.stars }).map((_, j) => (
-                      <Star key={j} size={14} className="fill-[#c4704b] text-[#c4704b]" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-[#c8c3b8] leading-relaxed mb-4 italic">"{t.quote}"</p>
-                  <div>
-                    <p className="text-sm font-medium text-[#e5e3da]">{t.name}</p>
-                    <p className="text-xs text-[#787060]">{t.trip}</p>
-                  </div>
+            <p className="text-[#a09a8e] leading-relaxed mb-8">
+              ParkStay is the first booking platform built around national parks, not addresses.
+              Join our early community of travelers and hosts who believe the destination should come first.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                { icon: <Compass size={24} />, title: 'Travelers', desc: 'Get notified when stays go live near your favorite parks' },
+                { icon: <Mountain size={24} />, title: 'Hosts', desc: 'List your property with the lowest platform fees in the industry' },
+                { icon: <Map size={24} />, title: 'Families', desc: 'Plan multi-park road trips your kids will never forget' },
+              ].map((item, i) => (
+                <div key={item.title} className="bg-[#353129] rounded-xl p-6 border border-[#4a463d]">
+                  <div className="text-[#7a8c6e] mb-3 flex justify-center">{item.icon}</div>
+                  <h3 className="font-serif text-lg font-semibold text-[#e5e3da] mb-2">{item.title}</h3>
+                  <p className="text-sm text-[#a09a8e] leading-relaxed">{item.desc}</p>
                 </div>
-              </FadeIn>
-            ))}
-          </div>
+              ))}
+            </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -382,28 +361,28 @@ export default function Home() {
                   your property is the perfect home base. Join the only booking platform built around national parks.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={() => toast('Feature coming soon', { description: 'Property listing will be available soon' })}
-                    className="inline-flex items-center justify-center gap-2 bg-white text-[#3d5a3e] hover:bg-[#e5e3da] rounded-xl px-8 py-3.5 text-sm font-medium transition-colors"
-                  >
-                    List Your Property <ArrowRight size={16} />
-                  </button>
-                  <button
-                    onClick={() => toast('Feature coming soon', { description: 'Learn about Teeco cohosting services' })}
-                    className="inline-flex items-center justify-center gap-2 border border-white/30 text-white hover:bg-white/10 rounded-xl px-8 py-3.5 text-sm font-medium transition-colors"
-                  >
-                    Learn About Cohosting
-                  </button>
+              <Link
+                href="/list-your-property"
+                className="inline-flex items-center gap-2 bg-white text-[#3d5a3e] hover:bg-[#e5e3da] rounded-xl px-8 py-3.5 text-sm font-medium transition-colors no-underline"
+              >
+                List Your Property <ArrowRight size={16} />
+              </Link>
+              <button
+                onClick={() => toast('Coming soon', { description: 'Cohosting information will be available soon' })}
+                className="inline-flex items-center gap-2 border border-white/40 hover:bg-white/10 text-white rounded-xl px-8 py-3.5 text-sm font-medium transition-colors"
+              >
+                Learn About Cohosting
+              </button>
                 </div>
               </div>
               <div className="hidden lg:block">
                 <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
                   <div className="space-y-6">
                     {[
-                      { value: '2,400+', label: 'Active Listings' },
-                      { value: '92%', label: 'Average Occupancy' },
-                      { value: '$0', label: 'Listing Fee' },
-                      { value: '24/7', label: 'Host Support' },
+                      { value: '3%', label: 'Platform Fee' },
+                      { value: '474+', label: 'Park Destinations' },
+                      { value: 'Coming Soon', label: 'Stays' },
+                      { value: 'Coming Soon', label: 'Host Support' },
                     ].map(stat => (
                       <div key={stat.label} className="flex items-center justify-between border-b border-white/10 pb-4 last:border-0 last:pb-0">
                         <span className="text-sm text-white/70">{stat.label}</span>

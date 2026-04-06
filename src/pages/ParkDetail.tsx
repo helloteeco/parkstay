@@ -145,7 +145,7 @@ export default function ParkDetail() {
               <div className="flex items-end justify-between mb-6">
                 <div>
                   <h2 className="font-serif text-2xl font-semibold text-[#2b2823]">Stays Near {park.name}</h2>
-                  <p className="text-sm text-[#787060] mt-1">{park.staysNearby} vacation rentals within 30 miles</p>
+                  <p className="text-sm text-[#787060] mt-1">Vacation rentals coming soon</p>
                 </div>
                 <button
                   onClick={() => toast('Feature coming soon')}
@@ -226,7 +226,7 @@ export default function ParkDetail() {
                 onClick={() => toast('Feature coming soon', { description: 'Search for available stays' })}
                 className="w-full bg-[#3d5a3e] hover:bg-[#2e4830] text-white rounded-xl py-3 text-sm font-medium transition-colors"
               >
-                Search {park.staysNearby} Stays
+                Search Stays
               </button>
 
               <p className="text-xs text-center text-[#787060] mt-3">
@@ -249,7 +249,7 @@ export default function ParkDetail() {
                   <Home size={18} className="text-[#3d5a3e] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-[#2b2823]">Stays Nearby</p>
-                    <p className="text-xs text-[#787060]">{park.staysNearby} vacation rentals within 30 mi</p>
+                    <p className="text-xs text-[#787060]">Vacation rentals coming soon</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

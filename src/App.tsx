@@ -8,8 +8,13 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import ParkDetail from "./pages/ParkDetail";
 import RoadTrips from "./pages/RoadTrips";
+import HostInterestForm from "./components/HostInterestForm";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import DoNotSell from "./pages/DoNotSell";
+import CookieConsent from "@/components/CookieConsent";
+
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/" component={Home} />
@@ -17,6 +22,10 @@ function Router() {
       <Route path="/explore/:state" component={Explore} />
       <Route path="/park/:parkId" component={ParkDetail} />
       <Route path="/road-trips" component={RoadTrips} />
+      <Route path="/list-your-property" component={HostInterestForm} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/do-not-sell" component={DoNotSell} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
@@ -30,6 +39,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <CookieConsent />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

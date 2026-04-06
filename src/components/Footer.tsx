@@ -29,14 +29,9 @@ export default function Footer() {
             <p className="text-sm text-[#a09a8e] leading-relaxed mb-6 max-w-xs">
               The destination-first way to find stays near America's most beautiful national parks, monuments, and forests.
             </p>
-            {/* 1% for Parks Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#3d5a3e]/40 bg-[#3d5a3e]/10">
-              <span className="text-[#7a8c6e] text-lg">🌲</span>
-              <div>
-                <p className="text-xs font-medium text-[#7a8c6e]">1% for Parks</p>
-                <p className="text-[10px] text-[#787060]">Supporting the National Park Foundation</p>
-              </div>
-            </div>
+            <p className="text-xs text-[#787060] leading-relaxed">
+              We're committed to supporting America's national parks.
+            </p>
           </div>
 
           {/* Explore Column */}
@@ -71,7 +66,10 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-medium tracking-[0.1em] uppercase text-[#787060] mb-4">For Property Owners</h4>
             <ul className="space-y-2.5">
-              {['List Your Property', 'Property Management', 'Hosting Resources', 'Teeco Cohosting'].map(item => (
+              <li>
+                  <Link href="/list-your-property" className="text-sm text-[#a09a8e] hover:text-[#e5e3da] transition-colors no-underline">List Your Property</Link>
+                </li>
+              {['Property Management', 'Hosting Resources', 'Teeco Cohosting'].map(item => (
                 <li key={item}>
                   <button onClick={handleClick} className="text-sm text-[#a09a8e] hover:text-[#e5e3da] transition-colors">
                     {item}
@@ -89,11 +87,10 @@ export default function Footer() {
               &copy; {new Date().getFullYear()} ParkStay by Teeco. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              {['Privacy', 'Terms', 'Contact'].map(item => (
-                <button key={item} onClick={handleClick} className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors">
-                  {item}
-                </button>
-              ))}
+              <Link href="/privacy" className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors no-underline">Privacy</Link>
+              <Link href="/terms" className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors no-underline">Terms</Link>
+              <Link href="/do-not-sell" className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors no-underline">Do Not Sell or Share My Personal Information</Link>
+              <button onClick={handleClick} className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors">Contact</button>
             </div>
           </div>
         </div>
