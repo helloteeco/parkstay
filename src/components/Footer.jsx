@@ -1,82 +1,102 @@
-import { Link } from 'react-router-dom'
+/*
+  DESIGN: Topographic Naturalism — ParkStay by Teeco
+  Footer: Dark warm gray (#2b2823) background, cream text, thin dividers
+*/
+import { toast } from 'sonner';
 
 export default function Footer() {
+  const handleClick = () => toast('Feature coming soon');
+
   return (
     <footer className="bg-[#2b2823] text-[#e5e3da]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-          {/* Logo & Tagline */}
-          <div className="col-span-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 border-2 border-[#e5e3da] rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-[#e5e3da]" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+      <div className="container py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
+          {/* Brand Column */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-[#e5e3da] flex items-center justify-center">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b2823" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
                 </svg>
               </div>
-              <div className="flex flex-col leading-tight">
-                <span className="font-serif font-bold text-lg text-[#e5e3da]">ParkStay</span>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-[#d5d2c8]">by teeco</span>
+              <div className="flex flex-col leading-none">
+                <span className="text-lg font-semibold text-[#e5e3da]" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>ParkStay</span>
+                <span className="text-[10px] font-light tracking-[0.12em] text-[#787060] uppercase">by teeco</span>
               </div>
             </div>
-            <p className="text-sm text-[#d5d2c8] mb-6 leading-relaxed">
+            <p className="text-sm text-[#a09a8e] leading-relaxed mb-6 max-w-xs">
               The destination-first way to find stays near America's most beautiful national parks, monuments, and forests.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#d5d2c8]">
-              <span className="text-green-400">üåø</span>
+            {/* 1% for Parks Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#3d5a3e]/40 bg-[#3d5a3e]/10">
+              <span className="text-[#7a8c6e] text-lg">🌲</span>
               <div>
-                <span className="font-semibold text-[#e5e3da]">1% for Parks</span>
-                <br />
-                Supporting the National Park Foundation
+                <p className="text-xs font-medium text-[#7a8c6e]">1% for Parks</p>
+                <p className="text-[10px] text-[#787060]">Supporting the National Park Foundation</p>
               </div>
             </div>
           </div>
 
-          {/* Explore */}
+          {/* Explore Column */}
           <div>
-            <h4 className="font-serif font-semibold text-[#e5e3da] mb-4">Explore</h4>
-            <ul className="space-y-3 text-sm text-[#d5d2c8]">
-              <li><Link to="/explore" className="hover:text-[#e5e3da] transition">National Parks</Link></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">National Monuments</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">National Forests</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">National Seashores</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">State Parks</a></li>
+            <h4 className="text-xs font-medium tracking-[0.1em] uppercase text-[#787060] mb-4">Explore</h4>
+            <ul className="space-y-2.5 list-none p-0">
+              {['National Parks', 'National Monuments', 'National Forests', 'National Seashores', 'State Parks'].map(item => (
+                <li key={item}>
+                  <button onClick={handleClick} className="text-sm text-[#a09a8e] hover:text-[#e5e3da] transition-colors">
+                    {item}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Plan Your Trip */}
+          {/* Plan Your Trip Column */}
           <div>
-            <h4 className="font-serif font-semibold text-[#e5e3da] mb-4">Plan Your Trip</h4>
-            <ul className="space-y-3 text-sm text-[#d5d2c8]">
-              <li><Link to="/road-trips" className="hover:text-[#e5e3da] transition">Family Road Trips</Link></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Weekend Getaways</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Seasonal Guides</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Packing Lists</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Travel Tips</a></li>
+            <h4 className="text-xs font-medium tracking-[0.1em] uppercase text-[#787060] mb-4">Plan Your Trip</h4>
+            <ul className="space-y-2.5 list-none p-0">
+              {['Family Road Trips', 'Weekend Getaways', 'Seasonal Guides', 'Packing Lists', 'Travel Tips'].map(item => (
+                <li key={item}>
+                  <button onClick={handleClick} className="text-sm text-[#a09a8e] hover:text-[#e5e3da] transition-colors">
+                    {item}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* For Property Owners */}
+          {/* For Hosts Column */}
           <div>
-            <h4 className="font-serif font-semibold text-[#e5e3da] mb-4">For Property Owners</h4>
-            <ul className="space-y-3 text-sm text-[#d5d2c8]">
-              <li><a href="#" className="hover:text-[#e5e3da] transition">List Your Property</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Property Management</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Hosting Resources</a></li>
-              <li><a href="#" className="hover:text-[#e5e3da] transition">Teeco Cohosting</a></li>
+            <h4 className="text-xs font-medium tracking-[0.1em] uppercase text-[#787060] mb-4">For Property Owners</h4>
+            <ul className="space-y-2.5 list-none p-0">
+              {['List Your Property', 'Property Management', 'Hosting Resources', 'Teeco Cohosting'].map(item => (
+                <li key={item}>
+                  <button onClick={handleClick} className="text-sm text-[#a09a8e] hover:text-[#e5e3da] transition-colors">
+                    {item}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-[#787060]/30 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-[#d5d2c8]">¬© 2026 ParkStay by Teeco. All rights reserved.</p>
-          <div className="flex items-center gap-6 text-sm text-[#d5d2c8]">
-            <a href="#" className="hover:text-[#e5e3da] transition">Privacy</a>
-            <a href="#" className="hover:text-[#e5e3da] transition">Terms</a>
-            <a href="#" className="hover:text-[#e5e3da] transition">Contact</a>
+        {/* Bottom Bar */}
+        <div className="mt-12 pt-8 border-t border-[#3d3a33]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-[#787060]">
+              &copy; {new Date().getFullYear()} ParkStay by Teeco. All rights reserved.
+            </p>
+            <div className="flex items-center gap-6">
+              {['Privacy', 'Terms', 'Contact'].map(item => (
+                <button key={item} onClick={handleClick} className="text-xs text-[#787060] hover:text-[#a09a8e] transition-colors">
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </footer>
-  )
+  );
 }

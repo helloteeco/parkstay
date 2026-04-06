@@ -1,29 +1,33 @@
-import { Routes, Route } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import Home from './pages/Home'
-import Explore from './pages/Explore'
-import ParkDetail from './pages/ParkDetail'
-import RoadTrips from './pages/RoadTrips'
-import NotFound from './pages/NotFound'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import Home from './pages/Home.jsx';
+import Explore from './pages/Explore.jsx';
+import ParkDetail from './pages/ParkDetail.jsx';
+import RoadTrips from './pages/RoadTrips.jsx';
+import NotFound from './pages/NotFound.jsx';
 
 function App() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#faf9f6]">
-      <Navbar />
-      <main className="flex-1 w-full">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/explore/:state" element={<Explore />} />
-          <Route path="/park/:parkId" element={<ParkDetail />} />
-          <Route path="/road-trips" element={<RoadTrips />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
-      <Footer />
-    </div>
-  )
+    <BrowserRouter>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          style: {
+            fontFamily: "'Raleway', sans-serif",
+            fontSize: '0.875rem',
+          },
+        }}
+      />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/explore/:state" element={<Explore />} />
+        <Route path="/park/:parkId" element={<ParkDetail />} />
+        <Route path="/road-trips" element={<RoadTrips />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

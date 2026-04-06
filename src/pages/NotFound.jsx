@@ -1,29 +1,29 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { Compass } from 'lucide-react';
+import Navbar from '../components/Navbar.jsx';
+import Footer from '../components/Footer.jsx';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#faf9f6] px-4">
-      <div className="text-center max-w-2xl">
-        <h1 className="font-serif text-6xl text-[#2b2823] mb-4">404</h1>
-        <h2 className="font-serif text-4xl text-[#2b2823] mb-4">Page Not Found</h2>
-        <p className="text-[#787060] text-lg mb-8">
-          Looks like we took a wrong trail. The page you're looking for doesn't exist. Let's get you back on track.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex items-center justify-center topo-pattern">
+        <div className="text-center px-4">
+          <Compass size={48} className="text-[#d5d2c8] mx-auto mb-6" />
+          <h1 className="text-5xl font-bold text-[#2b2823] mb-3" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>404</h1>
+          <h2 className="text-xl font-semibold text-[#2b2823] mb-2" style={{ fontFamily: "'Source Serif 4', Georgia, serif" }}>Trail Not Found</h2>
+          <p className="text-[#787060] mb-8 max-w-sm mx-auto">
+            Looks like you've wandered off the trail. Let's get you back to exploring.
+          </p>
           <Link
             to="/"
-            className="px-8 py-3 bg-[#2b2823] text-[#e5e3da] rounded font-semibold hover:bg-[#1a1611] transition"
+            className="inline-flex items-center gap-2 bg-[#3d5a3e] hover:bg-[#2e4830] text-white rounded-xl px-6 py-3 text-sm font-medium transition-colors no-underline"
           >
-            Go Home
-          </Link>
-          <Link
-            to="/explore"
-            className="px-8 py-3 border-2 border-[#2b2823] text-[#2b2823] rounded font-semibold hover:bg-[#f5f5f5] transition"
-          >
-            Explore Parks
+            Back to Base Camp
           </Link>
         </div>
       </div>
+      <Footer />
     </div>
-  )
+  );
 }
