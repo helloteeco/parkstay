@@ -1,123 +1,151 @@
 /*
   DESIGN: Topographic Naturalism — ParkStay by Teeco
-  Interactive US Map for state-based park filtering
-  Compact grid-style map with proper US geographic layout
+  Interactive US Map using real SVG geography from react-simple-maps
+  States with parks are highlighted in green and clickable
 */
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLocation } from 'wouter';
+import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { states } from '@/lib/parkData';
 
-// Compact US state grid — tighter layout that resembles actual US geography
-// Grid is 11 cols x 8 rows (plus AK/HI offset)
-const stateGrid: { code: string; name: string; row: number; col: number }[] = [
-  // Row 0 — top tier
-  { code: 'AK', name: 'Alaska', row: 0, col: 0 },
-  { code: 'ME', name: 'Maine', row: 0, col: 10 },
-  // Row 1
-  { code: 'WA', name: 'Washington', row: 1, col: 1 },
-  { code: 'MT', name: 'Montana', row: 1, col: 2 },
-  { code: 'ND', name: 'North Dakota', row: 1, col: 3 },
-  { code: 'MN', name: 'Minnesota', row: 1, col: 4 },
-  { code: 'WI', name: 'Wisconsin', row: 1, col: 5 },
-  { code: 'MI', name: 'Michigan', row: 1, col: 7 },
-  { code: 'VT', name: 'Vermont', row: 1, col: 8 },
-  { code: 'NH', name: 'New Hampshire', row: 1, col: 9 },
-  // Row 2
-  { code: 'OR', name: 'Oregon', row: 2, col: 1 },
-  { code: 'ID', name: 'Idaho', row: 2, col: 2 },
-  { code: 'WY', name: 'Wyoming', row: 2, col: 3 },
-  { code: 'SD', name: 'South Dakota', row: 2, col: 4 },
-  { code: 'IA', name: 'Iowa', row: 2, col: 5 },
-  { code: 'IL', name: 'Illinois', row: 2, col: 6 },
-  { code: 'IN', name: 'Indiana', row: 2, col: 7 },
-  { code: 'OH', name: 'Ohio', row: 2, col: 8 },
-  { code: 'PA', name: 'Pennsylvania', row: 2, col: 9 },
-  { code: 'NY', name: 'New York', row: 2, col: 10 },
-  { code: 'MA', name: 'Massachusetts', row: 2, col: 11 },
-  // Row 3
-  { code: 'CA', name: 'California', row: 3, col: 1 },
-  { code: 'NV', name: 'Nevada', row: 3, col: 2 },
-  { code: 'UT', name: 'Utah', row: 3, col: 3 },
-  { code: 'CO', name: 'Colorado', row: 3, col: 4 },
-  { code: 'NE', name: 'Nebraska', row: 3, col: 5 },
-  { code: 'MO', name: 'Missouri', row: 3, col: 6 },
-  { code: 'KY', name: 'Kentucky', row: 3, col: 7 },
-  { code: 'WV', name: 'West Virginia', row: 3, col: 8 },
-  { code: 'NJ', name: 'New Jersey', row: 3, col: 9 },
-  { code: 'CT', name: 'Connecticut', row: 3, col: 10 },
-  { code: 'RI', name: 'Rhode Island', row: 3, col: 11 },
-  // Row 4
-  { code: 'AZ', name: 'Arizona', row: 4, col: 2 },
-  { code: 'NM', name: 'New Mexico', row: 4, col: 3 },
-  { code: 'KS', name: 'Kansas', row: 4, col: 4 },
-  { code: 'AR', name: 'Arkansas', row: 4, col: 5 },
-  { code: 'TN', name: 'Tennessee', row: 4, col: 6 },
-  { code: 'VA', name: 'Virginia', row: 4, col: 7 },
-  { code: 'NC', name: 'North Carolina', row: 4, col: 8 },
-  { code: 'DE', name: 'Delaware', row: 4, col: 9 },
-  { code: 'MD', name: 'Maryland', row: 4, col: 10 },
-  // Row 5
-  { code: 'OK', name: 'Oklahoma', row: 5, col: 3 },
-  { code: 'TX', name: 'Texas', row: 5, col: 4 },
-  { code: 'LA', name: 'Louisiana', row: 5, col: 5 },
-  { code: 'MS', name: 'Mississippi', row: 5, col: 6 },
-  { code: 'AL', name: 'Alabama', row: 5, col: 7 },
-  { code: 'GA', name: 'Georgia', row: 5, col: 8 },
-  { code: 'SC', name: 'South Carolina', row: 5, col: 9 },
-  { code: 'DC', name: 'D.C.', row: 5, col: 10 },
-  // Row 6
-  { code: 'HI', name: 'Hawaii', row: 6, col: 0 },
-  { code: 'FL', name: 'Florida', row: 6, col: 8 },
-];
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+
+// FIPS code to state abbreviation mapping
+const FIPS_TO_STATE: Record<string, string> = {
+  '01': 'AL', '02': 'AK', '04': 'AZ', '05': 'AR', '06': 'CA',
+  '08': 'CO', '09': 'CT', '10': 'DE', '11': 'DC', '12': 'FL',
+  '13': 'GA', '15': 'HI', '16': 'ID', '17': 'IL', '18': 'IN',
+  '19': 'IA', '20': 'KS', '21': 'KY', '22': 'LA', '23': 'ME',
+  '24': 'MD', '25': 'MA', '26': 'MI', '27': 'MN', '28': 'MS',
+  '29': 'MO', '30': 'MT', '31': 'NE', '32': 'NV', '33': 'NH',
+  '34': 'NJ', '35': 'NM', '36': 'NY', '37': 'NC', '38': 'ND',
+  '39': 'OH', '40': 'OK', '41': 'OR', '42': 'PA', '44': 'RI',
+  '45': 'SC', '46': 'SD', '47': 'TN', '48': 'TX', '49': 'UT',
+  '50': 'VT', '51': 'VA', '53': 'WA', '54': 'WV', '55': 'WI',
+  '56': 'WY',
+};
 
 export default function USMap() {
   const [, navigate] = useLocation();
   const [hoveredState, setHoveredState] = useState<string | null>(null);
+  const [tooltipContent, setTooltipContent] = useState('');
+  const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
-  const stateMap = new Map(states.map(s => [s.code, s]));
+  const stateMap = useMemo(() => new Map(states.map(s => [s.code, s])), []);
+
+  const handleClick = (stateCode: string) => {
+    if (stateMap.has(stateCode)) {
+      navigate(`/explore/${stateCode}`);
+    }
+  };
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <div
-        className="grid gap-[3px] sm:gap-1"
-        style={{
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          gridTemplateRows: 'repeat(7, 1fr)',
-        }}
-      >
-        {stateGrid.map(s => {
-          const info = stateMap.get(s.code);
-          const hasPark = !!info;
-          const isHovered = hoveredState === s.code;
+    <div className="w-full relative">
+      {/* Tooltip */}
+      {hoveredState && tooltipContent && (
+        <div
+          className="absolute z-20 bg-[#2b2823] text-white text-xs px-3 py-1.5 rounded-lg shadow-lg pointer-events-none whitespace-nowrap"
+          style={{
+            left: tooltipPos.x,
+            top: tooltipPos.y - 40,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          {tooltipContent}
+        </div>
+      )}
 
-          return (
-            <button
-              key={s.code}
-              onClick={() => hasPark ? navigate(`/explore/${s.code}`) : null}
-              onMouseEnter={() => setHoveredState(s.code)}
-              onMouseLeave={() => setHoveredState(null)}
-              className={`
-                relative aspect-square rounded-[4px] sm:rounded-md text-[8px] sm:text-[10px] md:text-xs font-medium
-                transition-all duration-200 flex items-center justify-center
-                ${hasPark
-                  ? isHovered
-                    ? 'bg-[#3d5a3e] text-white shadow-md scale-110 z-10'
-                    : 'bg-[#3d5a3e]/15 text-[#3d5a3e] hover:bg-[#3d5a3e] hover:text-white'
-                  : 'bg-[#e5e3da]/60 text-[#a09a8e]'
-                }
-              `}
-              style={{ gridColumn: s.col + 1, gridRow: s.row + 1 }}
-              title={`${s.name}${info ? ` — ${info.parkCount} park${info.parkCount > 1 ? 's' : ''}` : ''}`}
-            >
-              {s.code}
-              {isHovered && info && (
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#2b2823] text-white text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap z-20 shadow-lg pointer-events-none">
-                  {info.parkCount} park{info.parkCount > 1 ? 's' : ''}
-                </div>
-              )}
-            </button>
-          );
-        })}
+      <ComposableMap
+        projection="geoAlbersUsa"
+        projectionConfig={{ scale: 1000 }}
+        width={800}
+        height={500}
+        style={{ width: '100%', height: 'auto' }}
+      >
+        <Geographies geography={GEO_URL}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const fips = geo.id;
+              const stateCode = FIPS_TO_STATE[fips] || '';
+              const info = stateMap.get(stateCode);
+              const hasPark = !!info;
+              const isHovered = hoveredState === stateCode;
+
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  onClick={() => handleClick(stateCode)}
+                  onMouseEnter={(e) => {
+                    setHoveredState(stateCode);
+                    const stateName = geo.properties.name || stateCode;
+                    if (info) {
+                      setTooltipContent(`${stateName} — ${info.parkCount} park${info.parkCount > 1 ? 's' : ''}`);
+                    } else {
+                      setTooltipContent(stateName);
+                    }
+                    // Get position relative to the map container
+                    const rect = (e.target as SVGElement).closest('svg')?.getBoundingClientRect();
+                    if (rect) {
+                      setTooltipPos({
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top,
+                      });
+                    }
+                  }}
+                  onMouseMove={(e) => {
+                    const rect = (e.target as SVGElement).closest('svg')?.getBoundingClientRect();
+                    if (rect) {
+                      setTooltipPos({
+                        x: e.clientX - rect.left,
+                        y: e.clientY - rect.top,
+                      });
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredState(null);
+                    setTooltipContent('');
+                  }}
+                  style={{
+                    default: {
+                      fill: hasPark ? '#3d5a3e' : '#e5e3da',
+                      stroke: '#ffffff',
+                      strokeWidth: 0.75,
+                      outline: 'none',
+                      cursor: hasPark ? 'pointer' : 'default',
+                      transition: 'fill 0.2s ease',
+                    },
+                    hover: {
+                      fill: hasPark ? '#2e4830' : '#d5d2c8',
+                      stroke: '#ffffff',
+                      strokeWidth: 0.75,
+                      outline: 'none',
+                      cursor: hasPark ? 'pointer' : 'default',
+                    },
+                    pressed: {
+                      fill: hasPark ? '#1e3520' : '#d5d2c8',
+                      stroke: '#ffffff',
+                      strokeWidth: 0.75,
+                      outline: 'none',
+                    },
+                  }}
+                />
+              );
+            })
+          }
+        </Geographies>
+      </ComposableMap>
+
+      {/* Legend */}
+      <div className="flex items-center justify-center gap-6 mt-2 text-xs text-[#787060]">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-sm bg-[#3d5a3e]" />
+          <span>Parks with stays coming soon</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-sm bg-[#e5e3da]" />
+          <span>Coming later</span>
+        </div>
       </div>
     </div>
   );
